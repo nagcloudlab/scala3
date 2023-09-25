@@ -248,6 +248,17 @@ textUserTyped match
     println(s"searching by city and state: $city and $state")
   case _ => None
 
+//------------------------------------------------------------
+//  Accessing a Character in a String
+//------------------------------------------------------------
+
+"hello".charAt(0)
+
+"hello" (0)
+"hello".apply(0)
+
+//------------------------------------------------------------
+
 /*</script>*/ /*<generated>*/
 /*</generated>*/
 }
