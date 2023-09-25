@@ -1,0 +1,126 @@
+java.lang.AssertionError: NoDenotation.owner
+occurred in the presentation compiler.
+
+action parameters:
+offset: 2389
+uri: file://<WORKSPACE>/play-with-scala/strings.worksheet.sc
+text:
+object worksheet{
+  val p = "Hello, world!"
+  val q: String = "Hello, world!"
+  
+  val s = "Big Belly Burger"
+  s.length()
+  s.length
+  
+  s.count(c => c == 'B')
+  s.count(_ == 'B')
+  
+  s.dropRight(3)
+  s.dropWhile(_ != ' ')
+  s.filter(_ != ' ')
+  s.take(3)
+  s.takeRight(3)
+  s.takeWhile(_ != 'r')
+  
+  // Method chaining / Fluent-style
+  val x = "scala".drop(2).take(2).capitalize
+  val y = "scala" drop 2 take 3
+  y.capitalize
+  
+  //------------------------------------------------------------
+  // Testing String Equality
+  //------------------------------------------------------------
+  
+  val s1 = "Hello"
+  val s2 = "Hello"
+  val s3 = "H" + "ello"
+  
+  s1.==(s3)
+  s1 == s2
+  
+  s1.==(s3)
+  s1 == s3
+  
+  val s4: String = null
+  s3 == s4
+  s4 == s3
+  
+  val s5 = "Hello"
+  val s6 = "hello"
+  s5.toUpperCase == s6.toUpperCase
+  
+  val a = "Kimberly"
+  val b = "kimberly"
+  
+  a.equalsIgnoreCase(b)
+  a equalsIgnoreCase b
+  
+  val i: String = null
+  val j: String = null
+  
+  // i.toUpperCase == j.toUpperCase
+  
+  //------------------------------------------------------------
+  // Creating Multiline Strings
+  //------------------------------------------------------------
+  
+  val foo = """this is a multiline
+          String
+          """
+  
+  println(foo)
+  
+  val speech1 = """Four score and
+seven years ago""".stripMargin
+  
+  println(speech1)
+  
+  val speech2 = """Four score and
+                  #seven years ago""".stripMargin('#')
+  
+  println(speech2)
+  
+  val speech3 = """Four score and |seven years ago
+our fathers...""".stripMargin.replaceAll("\n", " ")
+  
+  println(speech3)
+  
+  //------------------------------------------------------------
+  // Splitting Strings
+  //------------------------------------------------------------
+  
+  "hello world".split(" ")
+  "hello world".split(" ").foreach(word => println(word))
+  "hello world".split(" ").foreach(println)
+  
+  val s7 = "eggs, milk, butter, Cocoa Puffs"
+  
+  s7.split(",").map(_.trim()).foreach(println)
+  
+  s7 split "," map (_.trim()) foreach println
+  
+  "Relax, nothing is under control".split("\\s+").foreach(println)
+  
+  "hello world".split(" ").foreach(println)
+  "hello world".split(' ').foreach(println)
+  
+  //------------------------------------------------------------
+  //  Substituting Variables into Strings
+  //------------------------------------------------------------
+  
+  val name[="@@"]
+}
+
+
+error stacktrace:
+dotty.tools.dotc.core.SymDenotations$NoDenotation$.owner(SymDenotations.scala:2576)
+	scala.meta.internal.pc.SignatureHelpProvider$.isValid(SignatureHelpProvider.scala:83)
+	scala.meta.internal.pc.SignatureHelpProvider$.notCurrentApply(SignatureHelpProvider.scala:96)
+	scala.meta.internal.pc.SignatureHelpProvider$.$anonfun$1(SignatureHelpProvider.scala:48)
+	scala.collection.StrictOptimizedLinearSeqOps.loop$3(LinearSeq.scala:280)
+	scala.collection.StrictOptimizedLinearSeqOps.dropWhile(LinearSeq.scala:282)
+	scala.collection.StrictOptimizedLinearSeqOps.dropWhile$(LinearSeq.scala:278)
+	scala.collection.immutable.List.dropWhile(List.scala:79)
+	scala.meta.internal.pc.SignatureHelpProvider$.signatureHelp(SignatureHelpProvider.scala:48)
+	scala.meta.internal.pc.ScalaPresentationCompiler.signatureHelp$$anonfun$1(ScalaPresentationCompiler.scala:371)

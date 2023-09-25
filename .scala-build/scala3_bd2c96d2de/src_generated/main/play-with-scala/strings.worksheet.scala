@@ -1,3 +1,12 @@
+
+package play$minuswith$minusscala
+
+
+
+final class strings$u002Eworksheet$_ {
+def args = strings$u002Eworksheet_sc.args$
+def scriptPath = """play-with-scala/strings.worksheet.sc"""
+/*<script>*/
 import scala.util.matching.Regex
 
 val p = "Hello, world!"
@@ -238,3 +247,28 @@ textUserTyped match
   case MoviesNearCityStateRE(city, state) =>
     println(s"searching by city and state: $city and $state")
   case _ => None
+
+/*</script>*/ /*<generated>*/
+/*</generated>*/
+}
+
+object strings$u002Eworksheet_sc {
+  private var args$opt0 = Option.empty[Array[String]]
+  def args$set(args: Array[String]): Unit = {
+    args$opt0 = Some(args)
+  }
+  def args$opt: Option[Array[String]] = args$opt0
+  def args$: Array[String] = args$opt.getOrElse {
+    sys.error("No arguments passed to this script")
+  }
+
+  lazy val script = new strings$u002Eworksheet$_
+
+  def main(args: Array[String]): Unit = {
+    args$set(args)
+    script.hashCode() // hashCode to clear scalac warning about pure expression in statement position
+  }
+}
+
+export strings$u002Eworksheet_sc.script as strings$u002Eworksheet
+

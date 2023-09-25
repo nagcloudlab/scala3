@@ -1,0 +1,192 @@
+java.lang.AssertionError: assertion failed: NoType
+occurred in the presentation compiler.
+
+action parameters:
+offset: 3916
+uri: file://<WORKSPACE>/play-with-scala/strings.worksheet.sc
+text:
+object worksheet{
+  val p = "Hello, world!"
+  val q: String = "Hello, world!"
+  
+  val s = "Big Belly Burger"
+  s.length()
+  s.length
+  
+  s.count(c => c == 'B')
+  s.count(_ == 'B')
+  
+  s.dropRight(3)
+  s.dropWhile(_ != ' ')
+  s.filter(_ != ' ')
+  s.take(3)
+  s.takeRight(3)
+  s.takeWhile(_ != 'r')
+  
+  // Method chaining / Fluent-style
+  val x = "scala".drop(2).take(2).capitalize
+  val y = "scala" drop 2 take 3
+  y.capitalize
+  
+  //------------------------------------------------------------
+  // Testing String Equality
+  //------------------------------------------------------------
+  
+  val s1 = "Hello"
+  val s2 = "Hello"
+  val s3 = "H" + "ello"
+  
+  s1.==(s3)
+  s1 == s2
+  
+  s1.==(s3)
+  s1 == s3
+  
+  val s4: String = null
+  s3 == s4
+  s4 == s3
+  
+  val s5 = "Hello"
+  val s6 = "hello"
+  s5.toUpperCase == s6.toUpperCase
+  
+  val a = "Kimberly"
+  val b = "kimberly"
+  
+  a.equalsIgnoreCase(b)
+  a equalsIgnoreCase b
+  
+  val i: String = null
+  val j: String = null
+  
+  // i.toUpperCase == j.toUpperCase
+  
+  //------------------------------------------------------------
+  // Creating Multiline Strings
+  //------------------------------------------------------------
+  
+  val foo = """this is a multiline
+          String
+          """
+  
+  println(foo)
+  
+  val speech1 = """Four score and
+seven years ago""".stripMargin
+  
+  println(speech1)
+  
+  val speech2 = """Four score and
+                  #seven years ago""".stripMargin('#')
+  
+  println(speech2)
+  
+  val speech3 = """Four score and |seven years ago
+our fathers...""".stripMargin.replaceAll("\n", " ")
+  
+  println(speech3)
+  
+  //------------------------------------------------------------
+  // Splitting Strings
+  //------------------------------------------------------------
+  
+  "hello world".split(" ")
+  "hello world".split(" ").foreach(word => println(word))
+  "hello world".split(" ").foreach(println)
+  
+  val s7 = "eggs, milk, butter, Cocoa Puffs"
+  
+  s7.split(",").map(_.trim()).foreach(println)
+  
+  s7 split "," map (_.trim()) foreach println
+  
+  "Relax, nothing is under control".split("\\s+").foreach(println)
+  
+  "hello world".split(" ").foreach(println)
+  "hello world".split(' ').foreach(println)
+  
+  //------------------------------------------------------------
+  //  Substituting Variables into Strings
+  //------------------------------------------------------------
+  
+  val name = "Nag"
+  val age = 40
+  val weight = 75
+  
+  println(s"$name is $age years old and weighs $weight Kg.")
+  println(s"Age next year: ${age + 1}")
+  println(s"You are 33 years old: ${age == 33}")
+  
+  case class Student(name: String, score: Double)
+  val stud = Student("foo", 12.00)
+  
+  println(s"${stud.name} has a score of ${stud.score}")
+  println(s"$stud.name has a score of $stud.score")
+  
+  println(f"$name is $age years old and weighs $weight%.2f Kg.")
+  
+  s"foo\nbar"
+  raw"foo\nbar"
+  
+  //------------------------------------------------------------
+  // Formatting String Output
+  //------------------------------------------------------------
+  
+  val h = "Hello"
+  f"'$h%s'"
+  f"'$h%10s'"
+  f"'$h%-10s'"
+  
+  f"'${h}%s'"
+  f"'${h}%10s'"
+  f"'${h}%-10s'"
+  
+  //------------------------------------------------------------
+  // Processing a String One Character at a Time
+  //------------------------------------------------------------
+  
+  val s8 = "hello"
+  
+  val uppers81 = for c <- s8 yield c.toUpper
+  val uppers82 = s8.map(c => c.toUpper)
+  val uppers83 = s8.map(_.toUpper)
+  val uppers84WithoutCharA = s8.filter(_ != 'a').map(_.toUpper)
+  
+  for c <- s8 do println(c)
+  "hello".foreach(println)
+  
+  "hello".getBytes.foreach(println)
+  
+  val result1 = for
+    c <- "Hello World"
+    if c != 'l'
+  yield c.toUpper
+  
+  val result2 = "Hello World"
+    .filter(_ != 'l')
+    .map(_.toUpper)
+  
+  val xx = "HELLO".map(c => {
+    val i: Int = c.toByte + 32
+    i.toChar
+  })
+  
+  val yy = "HELLO".map {
+      c@@
+  }
+  
+}
+
+
+error stacktrace:
+scala.runtime.Scala3RunTime$.assertFailed(Scala3RunTime.scala:8)
+	dotty.tools.dotc.core.Types$TypeBounds.<init>(Types.scala:5097)
+	dotty.tools.dotc.core.Types$AliasingBounds.<init>(Types.scala:5176)
+	dotty.tools.dotc.core.Types$TypeAlias.<init>(Types.scala:5198)
+	dotty.tools.dotc.core.Types$TypeAlias$.apply(Types.scala:5231)
+	dotty.tools.dotc.core.Types$Type.bounds(Types.scala:1729)
+	scala.meta.internal.pc.completions.CaseKeywordCompletion$.contribute(MatchCaseCompletions.scala:154)
+	scala.meta.internal.pc.completions.Completions.advancedCompletions(Completions.scala:433)
+	scala.meta.internal.pc.completions.Completions.completions(Completions.scala:183)
+	scala.meta.internal.pc.completions.CompletionProvider.completions(CompletionProvider.scala:86)
+	scala.meta.internal.pc.ScalaPresentationCompiler.complete$$anonfun$1(ScalaPresentationCompiler.scala:119)
