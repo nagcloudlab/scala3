@@ -115,3 +115,71 @@ val p41 = Pizza
 object Util:
     def m1=println("m1")
     def m2=println("m2")
+
+
+//  Defining a Private Primary Constructor
+
+class Student private (var name: String)
+// val s=new Student("s1")
+object  Student:
+    def getInstance(name:String)=Student(name)
+
+val s1=Student.getInstance("stud-1")
+
+
+object FileUtils:
+    def readFile(filename: String): String = ???
+    def writeFile(filename: String, contents: String): Unit = ???
+
+// val contents = FileUtils.readFile("input.txt")
+// FileUtils.writeFile("output.txt", contents)
+
+
+
+
+//  Providing Default Values for Constructor Parameters
+
+
+// class Socket(val timeout: Int):
+//     def this() = this(10_000)
+
+// class Socket(val timeout: Int = 10_000)
+// val s = Socket()
+// s.timeout
+
+// val s2 = Socket(5_000)
+// s2.timeout
+
+
+class Socket(val timeout: Int = 1_000, val linger: Int = 2_000):
+    override def toString = s"timeout: $timeout, linger: $linger"
+
+println(Socket())
+println(Socket(3_000))
+println(Socket(3_000,4_000))
+
+Socket(timeout=3_000, linger=4_000)
+Socket(linger=4_000, timeout=3_000)
+Socket(timeout=3_000)
+Socket(linger=4_000)
+
+
+
+// Handling Constructor Parameters When Extending a Class
+ 
+class Person(val name: String)
+class Worker(name: String, val age: Int)  extends Person(name):
+    override def toString = s"$name is $age years old"
+
+val joe = Worker("Joe", 33)
+
+
+class Todo private(val title:String)
+object Todo:
+    def apply(title:String):Todo = new Todo(title)
+
+
+val todo1=Todo.apply("learn scala")
+val todo2=Todo("learn life")
+
+
