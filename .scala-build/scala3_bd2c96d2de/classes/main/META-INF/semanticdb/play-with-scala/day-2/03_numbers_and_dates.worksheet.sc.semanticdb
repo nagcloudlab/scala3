@@ -1,0 +1,1880 @@
+
+€ò7play-with-scala/day-2/03_numbers_and_dates.worksheet.sc®Himport java.util.Locale
+//-------------------------------------------------------
+// Numeric types
+//-------------------------------------------------------
+
+Char.MinValue.toInt
+Char.MaxValue.toInt
+Byte.MinValue
+Byte.MaxValue
+Short.MinValue
+Short.MaxValue
+Int.MinValue
+Int.MaxValue
+Long.MinValue
+Long.MaxValue
+Float.MinValue
+Float.MaxValue
+Double.MinValue
+Double.MaxValue
+
+//-------------------------------------------------------
+//Underscores in Numeric Literals
+//-------------------------------------------------------
+
+// Int
+val x1 = 1_000
+val x2 = 100_000
+val x3 = 1_000_000
+
+// Long (can also use lowercase ‚ÄòL‚Äô, but I find that confusing)
+val x4 = 1_000_000L
+
+// Double
+val x5 = 1_123.45
+val x6 = 1_123.45d
+val x7 = 1_123.45d
+val x8 = 1_234e2
+
+// Float
+val x9 = 3_456.7f
+val x10 = 3_456.7f
+val x11 = 1_234e2f
+
+// BigInt and BigDecimal
+val x12: BigInt = 1_000_000
+val x13: BigDecimal = 1_234.56
+
+val x = 1_000 + 1
+if x > 1_000 && x < 1_000_000 then println(x)
+
+x match
+  case 1_000 => println("got 1,000")
+  case _     => println("got something else")
+
+for
+  i <- 1 to 1_000
+  if i > 999
+do println(i)
+
+// Integer.parseInt("1_000") // NumberFormatException
+// "1_000".toInt // NumberFormatException
+
+//-------------------------------------------------------
+//Parsing a Number from a String
+//-------------------------------------------------------
+
+"1".toByte
+"1".toShort
+"1".toInt
+"1".toLong
+"1".toFloat
+"1".toDouble
+
+// "hello!".toInt // java.lang.NumberFormatException
+
+"1".toByteOption
+"1".toShortOption
+"1".toIntOption
+"1".toLongOption
+"1".toFloatOption
+"1".toDoubleOption
+"one".toIntOption
+
+val b1 = BigInt("1")
+val b2 = BigDecimal("1.234")
+
+// val b3 = BigInt("yo") // NumberFormatException
+// val b4 = BigDecimal("dude!") // NumberFormatException
+
+Integer.parseInt("1", 2)
+Integer.parseInt("10", 2)
+Integer.parseInt("100", 2)
+Integer.parseInt("1", 8)
+Integer.parseInt("10", 8)
+
+// you're not required to declare "throws NumberFormatException"
+def makeIntV1(s: String) = s.toInt
+
+def makeIntV2(s: String): Option[Int] =
+  try Some(s.toInt)
+  catch case e: NumberFormatException => None
+
+// or
+
+import scala.util.Try
+def makeIntV3(s: String): Option[Int] = Try(s.toInt).toOption
+
+makeIntV3("a")
+makeIntV3("1")
+makeIntV3("2147483647")
+makeIntV3("2147483648")
+
+import scala.util.{Try, Success, Failure}
+def makeIntV4(s: String): Try[Int] = Try(s.toInt)
+
+makeIntV4("1") // Success(1)
+makeIntV4(
+  "a"
+) // Failure(java.lang.NumberFormatException: For input string: "a")
+
+@throws(classOf[NumberFormatException]) def makeIntV5(s: String) = s.toInt
+
+//-------------------------------------------------------
+// Converting Between Numeric Types (Casting)
+//-------------------------------------------------------
+
+val b: Byte = 1
+b.toShort
+b.toInt
+b.toLong
+b.toFloat
+b.toDouble
+
+val d1 = 100.0
+d1.toFloat
+d1.toLong
+d1.toInt
+d1.toShort
+d1.toByte
+
+val d2: Double = 65_535.0
+d2.isValidByte
+d2.isValidChar
+d2.isValidShort
+d2.isValidInt
+
+// d.isValidFloat // not a member of Double
+// d.isValidLong // not a member of Double
+
+val d3 = 1.5
+d3.isValidInt
+d3.isValidShort
+d3.isValidByte
+
+val b3: Byte = 1
+b3.asInstanceOf[Short]
+b3.asInstanceOf[Int]
+b3.asInstanceOf[Long]
+b3.asInstanceOf[Float]
+b3.asInstanceOf[Double]
+
+val i: Int = 101
+val l: Long = 102
+val s = "103"
+val b11 = BigInt(i)
+val b22 = BigInt(l)
+val b33 = BigInt(s)
+
+BigDecimal(100)
+BigDecimal(100L)
+BigDecimal(100.0)
+BigDecimal(100f)
+BigDecimal("100")
+BigDecimal(BigInt(100))
+
+BigDecimal(100).toBigIntExact
+BigDecimal(100.5).toBigIntExact
+BigDecimal(100).toIntExact
+// BigDecimal(100.5).toIntExact
+// BigDecimal(100.5).toLongExact
+// BigDecimal(100.5).toByteExact
+// BigDecimal(100.5).toShortExact
+
+//-------------------------------------------------------
+// Overriding the Default Numeric Type
+//-------------------------------------------------------
+
+val a1 = 1
+val a2: Byte = 1
+val a3: Short = 1
+val a4: Int = 1
+val a5: Long = 1
+val a6: Float = 1
+val a7: Double = 1
+// or
+val a8 = 0: Byte
+val a9 = 0: Int
+val a10 = 0: Short
+val a11 = 0: Double
+val a12 = 0: Float
+
+val a13 = 1L
+val a14 = 1L
+val a16 = 1d
+val a17 = 1d
+val a18 = 1f
+
+val a19 = 0x20
+val a20 = 0x20L
+
+// var [name]: [Type] = [initial value]
+
+// example
+// var a: Short = 0
+
+class Foo:
+  var a: Short = 0
+  var b: Short = _
+  var s: String = _
+
+val f = Foo()
+f.a
+f.b
+f.s
+
+val ss = "Hala"
+val o = ss: Object
+
+//-------------------------------------------------------
+// Replacements for ++ and ‚àí‚àí
+// -------------------------------------------------------
+
+var c1 = 1
+c1 += 1
+c1
+
+var c2 = 1
+c2 *= 4
+c2
+c2 /= 2
+c2
+
+val c3 = 1
+// c3 += 1
+
+var c4 = 1.2
+c4 += 1
+c4 *= 2
+c4
+
+//-------------------------------------------------------
+//  Comparing Floating-Point Numbers
+//-------------------------------------------------------
+
+0.1 + 0.1
+0.1 + 0.2
+
+val e1 = 0.3
+val e2 = 0.1 + 0.2
+e1 == e2
+
+// import scala.annotation.targetName
+
+// @targetName("approxEqual")
+// def ~=(x: Double, y: Double, tolerance: Double): Boolean =
+//   if (x - y).abs < tolerance then true else false
+
+// ~=(0.3, 0.1 + 0.2, 0.0001)
+// ~=(0.1 + 0.2, 0.3, 0.0001)
+
+// extension (x: Double) def ~=(y: Double): Boolean = (x - y).abs < 0.5
+
+// extension (x: Double)
+//   def ~=(y: Double): Boolean =
+//     if (x - y).abs < 0.5 then true else false
+
+// if 0.1 + 0.2 ~= 0.3 then println(true) else println(false)
+
+// extension (x: Double)
+//   def ~=(y: Double): Boolean =
+//     // allow a +/- 10% variance
+//     val xHigh = if x > 0 then x * 1.1 else x * 0.9
+//     val xLow = if x > 0 then x * 0.9 else x * 1.1
+//     if y >= xLow && y <= xHigh then true else false
+
+extension (x: Double)
+  def ~=(y: Double, tolerance: Double): Boolean =
+    if (x - y).abs < tolerance then true else false
+
+1.0 ~= (1.1, .2)
+1.0 ~= (0.9, .2)
+1.0 ~= (1.21, .2)
+1.0 ~= (0.79, .2)
+
+//-------------------------------------------------------
+//Handling Large Numbers
+//-------------------------------------------------------
+
+val bi = BigInt(1234567890) // BigInt = 1234567890
+val bd = BigDecimal(123456.789) // BigDecimal = 123456.789
+// using underscores with numeric literals
+val bi2 = BigInt(1_234_567_890) // BigInt = 1234567890
+val bd3 = BigDecimal(123_456.789)
+
+bi + bi
+bi * bi
+bi / BigInt(2)
+
+bi.toByte
+bi.toChar
+bi.toShort
+bi.toInt
+bi.toLong
+bi.toFloat
+bi.toDouble
+
+bi.isValidByte
+bi.isValidChar
+bi.isValidShort
+bi.isValidInt
+bi.isValidLong
+
+Long.MinValue
+Long.MaxValue
+Double.MinValue
+Double.MaxValue
+
+// BigDecimal Is Often Used for Currency
+0.10 + 0.20
+BigDecimal(0.10) + BigDecimal(0.20)
+
+BigDecimal(0.1 + 0.2)
+BigDecimal(.2 * .7)
+
+BigDecimal("0.1") + BigDecimal("0.2")
+BigDecimal("0.2") * BigDecimal("0.7")
+
+//-------------------------------------------------------
+// Formatting Numbers and Currency
+//-------------------------------------------------------
+
+import java.text.NumberFormat
+// val formatter = NumberFormat.getIntegerInstance
+// formatter.format(10_000)
+// formatter.format(1_000_000) // String = 1,000,000
+
+// val formatter = NumberFormat.getIntegerInstance(Locale.GERMANY)
+// formatter.format(1_000)
+// formatter.format(10_000)
+// formatter.format(1_000_000)
+
+val formatter = NumberFormat.getCurrencyInstance
+formatter.format(123.456789)
+formatter.format(12_345.6789)
+formatter.format(1_234_567.89)
+
+//-------------------------------------------------------
+// Creating New Date and Time Instances
+//-------------------------------------------------------
+
+import java.time._
+
+LocalDate.now
+LocalTime.now
+LocalDateTime.now
+Instant.now
+ZonedDateTime.now
+
+val squirrelDay1 = LocalDate.of(2020, 1, 21)
+val squirrelDay2 = LocalDate.of(2020, Month.JANUARY, 21)
+val squirrelDay3 = LocalDate.of(2020, 1, 1).plusDays(20)
+
+// LocalTime.of(hour: Int, minute: Int)
+// LocalTime.of(hour: Int, minute: Int, second: Int)
+LocalTime.of(0, 0)
+LocalTime.of(0, 1)
+LocalTime.of(1, 1)
+LocalTime.of(23, 59)
+
+// LocalTime.of(23, 60)
+// LocalTime.of(24, 1)
+
+val zdt =
+  ZonedDateTime.of(LocalDate.now, LocalTime.now, ZoneId.of("America/New_York"))
+
+ZoneId.of("Europe/Paris")
+ZoneId.of("Asia/Tokyo")
+ZoneId.of("America/New_York")
+ZoneId.of("UTC+1")
+
+//-------------------------------------------------------
+//  Calculating the Difference Between Two Dates
+//-------------------------------------------------------
+
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit.DAYS
+val now = LocalDate.of(2019, 1, 20)
+val xmas = LocalDate.of(2019, 12, 25)
+
+DAYS.between(now, xmas)
+
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit.*
+val now1 = LocalDate.of(2019, 1, 20) // 2019-01-20
+val nextXmas = LocalDate.of(2020, 12, 25) // 2020-12-25
+val years: Long = YEARS.between(
+  now1,
+  nextXmas
+)
+
+//-------------------------------------------------------
+// Formatting Dates
+//-------------------------------------------------------
+
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+val date = LocalDate.now // 2021-02-04
+val fmt = DateTimeFormatter.BASIC_ISO_DATE
+fmt.format(date)
+
+//-------------------------------------------------------
+// Parsing Strings into Dates
+// -------------------------------------------------------
+
+import java.time.LocalDate
+val d = LocalDate.parse("2020-12-10")
+
+import java.time.format.DateTimeFormatter
+val df = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+val da = LocalDate.parse("2020/12/10", df)
+*ñ
+Oplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#args().*argsÄä2"0
+.j,
+*(scala/Array#scala/Predef.String#í: *ç
+Uplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#scriptPath().*
+scriptPathÄä"
+j
+java/lang/String#í: *s
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x1. Ä*x1Ää"
+
+scala/Int#í: *s
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x2. Ä*x2Ää"
+
+scala/Int#í: *s
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x3. Ä*x3Ää"
+
+scala/Int#í: *t
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x4. Ä*x4Ää"
+scala/Long#í: *v
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x5. Ä*x5Ää"
+scala/Double#í: *v
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x6. Ä*x6Ää"
+scala/Double#í: *v
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x7. Ä*x7Ää"
+scala/Double#í: *v
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x8. Ä*x8Ää"
+scala/Double#í: *u
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x9. Ä*x9Ää"
+scala/Float#í: *w
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x10. Ä*x10Ää"
+scala/Float#í: *w
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x11. Ä*x11Ää"
+scala/Float#í: *Ä
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x12. Ä*x12Ää"
+scala/package.BigInt#í: *Ñ
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x13. Ä*x13Ää!"
+scala/package.BigDecimal#í: *q
+Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x. Ä*xÄä"
+
+scala/Int#í: *%
+local0*iÄä"
+
+scala/Int#*{
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b1. Ä*b1Ää"
+scala/math/BigInt#í: *
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b2. Ä*b2Ää"
+scala/math/BigDecimal#í: *Ä
+Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV1().(s)*sÄä"
+scala/Predef.String#*€
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV1().*	makeIntV1ÄämkY
+Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV1().(s)
+scala/Int#í: *Ä
+Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV2().(s)*sÄä"
+scala/Predef.String#*B
+local1 Ä*eÄä,"*
+(&$scala/package.NumberFormatException#*Ô
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV2().*	makeIntV2ÄäÄ~Y
+Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV2().(s)!scala/Option#
+scala/Int#í: *Ä
+Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV3().(s)*sÄä"
+scala/Predef.String#*Ô
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV3().*	makeIntV3ÄäÄ~Y
+Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV3().(s)!scala/Option#
+scala/Int#í: *Ä
+Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV4().(s)*sÄä"
+scala/Predef.String#*Ú
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV4().*	makeIntV4ÄäÉÄY
+Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV4().(s)#!scala/util/Try#
+scala/Int#í: *Ä
+Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV5().(s)*sÄä"
+scala/Predef.String#*ñ
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV5().*	makeIntV5j9
+75scala/throws#$" java/lang/NumberFormatException#ÄämkY
+Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV5().(s)
+scala/Int#í: *r
+Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b. Ä*bÄä"
+scala/Byte#í: *v
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d1. Ä*d1Ää"
+scala/Double#í: *v
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d2. Ä*d2Ää"
+scala/Double#í: *v
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d3. Ä*d3Ää"
+scala/Double#í: *t
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b3. Ä*b3Ää"
+scala/Byte#í: *q
+Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#i. Ä*iÄä"
+
+scala/Int#í: *r
+Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#l. Ä*lÄä"
+scala/Long#í: *x
+Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#s. Ä*sÄä"
+java/lang/String#í: *}
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b11. Ä*b11Ää"
+scala/math/BigInt#í: *}
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b22. Ä*b22Ää"
+scala/math/BigInt#í: *}
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b33. Ä*b33Ää"
+scala/math/BigInt#í: *s
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a1. Ä*a1Ää"
+
+scala/Int#í: *t
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a2. Ä*a2Ää"
+scala/Byte#í: *u
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a3. Ä*a3Ää"
+scala/Short#í: *s
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a4. Ä*a4Ää"
+
+scala/Int#í: *t
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a5. Ä*a5Ää"
+scala/Long#í: *u
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a6. Ä*a6Ää"
+scala/Float#í: *v
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a7. Ä*a7Ää"
+scala/Double#í: *t
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a8. Ä*a8Ää"
+scala/Byte#í: *s
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a9. Ä*a9Ää"
+
+scala/Int#í: *w
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a10. Ä*a10Ää"
+scala/Short#í: *x
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a11. Ä*a11Ää"
+scala/Double#í: *w
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a12. Ä*a12Ää"
+scala/Float#í: *v
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a13. Ä*a13Ää"
+scala/Long#í: *v
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a14. Ä*a14Ää"
+scala/Long#í: *x
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a16. Ä*a16Ää"
+scala/Double#í: *x
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a17. Ä*a17Ää"
+scala/Double#í: *w
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a18. Ä*a18Ää"
+scala/Float#í: *u
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a19. Ä*a19Ää"
+
+scala/Int#í: *v
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a20. Ä*a20Ää"
+scala/Long#í: *y
+Pplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#a(). Ä*aÄä"
+scala/Short#í: *|
+Yplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#`a_=`().(x$1)*x$1Ää"
+scala/Short#*€
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#`a_=`(). Ä*a_=Ääpn[
+Yplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#`a_=`().(x$1)scala/Unit#í: *y
+Pplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#b(). Ä*bÄä"
+scala/Short#í: *|
+Yplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#`b_=`().(x$1)*x$1Ää"
+scala/Short#*€
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#`b_=`(). Ä*b_=Ääpn[
+Yplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#`b_=`().(x$1)scala/Unit#í: *Å
+Pplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#s(). Ä*sÄä"
+scala/Predef.String#í: *Ñ
+Yplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#`s_=`().(x$1)*x$1Ää"
+scala/Predef.String#*€
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#`s_=`(). Ä*s_=Ääpn[
+Yplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#`s_=`().(x$1)scala/Unit#í: *«
+Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#`<init>`(). Ä@*<init>ÄäVT PNLplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#í: *°
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#*FooÄä¿
+Ωjava/lang/Object#PNLplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#"—
+Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#`<init>`().
+Pplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#a().
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#`a_=`().
+Pplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#b().
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#`b_=`().
+Pplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#s().
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#`s_=`().í: *≥
+Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#f. Ä*fÄäT"R
+PNLplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#í: *z
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#ss. Ä*ssÄä"
+java/lang/String#í: *x
+Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#o. Ä*oÄä"
+java/lang/Object#í: *u
+Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c1(). Ä*c1Ää"
+
+scala/Int#í: *w
+Vplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`c1_=`().(x$1)*x$1Ää"
+
+scala/Int#*÷
+Qplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`c1_=`(). Ä*c1_=ÄämkX
+Vplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`c1_=`().(x$1)scala/Unit#í: *u
+Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c2(). Ä*c2Ää"
+
+scala/Int#í: *w
+Vplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`c2_=`().(x$1)*x$1Ää"
+
+scala/Int#*÷
+Qplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`c2_=`(). Ä*c2_=ÄämkX
+Vplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`c2_=`().(x$1)scala/Unit#í: *s
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c3. Ä*c3Ää"
+
+scala/Int#í: *x
+Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c4(). Ä*c4Ää"
+scala/Double#í: *z
+Vplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`c4_=`().(x$1)*x$1Ää"
+scala/Double#*÷
+Qplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`c4_=`(). Ä*c4_=ÄämkX
+Vplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`c4_=`().(x$1)scala/Unit#í: *v
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#e1. Ä*e1Ää"
+scala/Double#í: *v
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#e2. Ä*e2Ää"
+scala/Double#í: *t
+Rplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().(x)*xÄä"
+scala/Double#*t
+Rplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().(y)*yÄä"
+scala/Double#*Ñ
+Zplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().(tolerance)*	toleranceÄä"
+scala/Double#*É
+Oplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().*~=Ää†ùT
+Rplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().(x)∞
+Rplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().(y)
+Zplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().(tolerance)scala/Boolean#í: *{
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi. Ä*biÄä"
+scala/math/BigInt#í: *
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bd. Ä*bdÄä"
+scala/math/BigDecimal#í: *}
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi2. Ä*bi2Ää"
+scala/math/BigInt#í: *Å
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bd3. Ä*bd3Ää"
+scala/math/BigDecimal#í: *é
+Rplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#formatter. Ä*	formatterÄä"
+java/text/NumberFormat#í: *ë
+Uplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#squirrelDay1. Ä*squirrelDay1Ää"
+java/time/LocalDate#í: *ë
+Uplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#squirrelDay2. Ä*squirrelDay2Ää"
+java/time/LocalDate#í: *ë
+Uplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#squirrelDay3. Ä*squirrelDay3Ää"
+java/time/LocalDate#í: *É
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#zdt. Ä*zdtÄä "
+java/time/ZonedDateTime#í: *
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#now. Ä*nowÄä"
+java/time/LocalDate#í: *Å
+Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#xmas. Ä*xmasÄä"
+java/time/LocalDate#í: *Å
+Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#now1. Ä*now1Ää"
+java/time/LocalDate#í: *â
+Qplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#nextXmas. Ä*nextXmasÄä"
+java/time/LocalDate#í: *z
+Nplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#years. Ä*yearsÄä"
+scala/Long#í: *Å
+Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#date. Ä*dateÄä"
+java/time/LocalDate#í: *é
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#fmt. Ä*fmtÄä+")
+'%#java/time/format/DateTimeFormatter#í: *{
+Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d. Ä*dÄä"
+java/time/LocalDate#í: *å
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#df. Ä*dfÄä+")
+'%#java/time/format/DateTimeFormatter#í: *}
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#da. Ä*daÄä"
+java/time/LocalDate#í: *ø
+Splay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`<init>`(). Ä@*<init>ÄäRP LJHplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#í: *’8
+Hplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`# *%03_numbers_and_dates$u002Eworksheet$_Ää‘7
+—7java/lang/Object#LJHplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#"È6
+Splay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`<init>`().
+Oplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#args().
+Uplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#scriptPath().
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x1.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x2.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x3.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x4.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x5.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x6.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x7.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x8.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x9.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x10.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x11.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x12.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x13.
+Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b1.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b2.
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV1().
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV2().
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV3().
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV4().
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV5().
+Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d1.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d2.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d3.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b3.
+Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#i.
+Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#l.
+Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#s.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b11.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b22.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b33.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a1.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a2.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a3.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a4.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a5.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a6.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a7.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a8.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a9.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a10.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a11.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a12.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a13.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a14.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a16.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a17.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a18.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a19.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a20.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#
+Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#f.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#ss.
+Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#o.
+Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c1().
+Qplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`c1_=`().
+Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c2().
+Qplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`c2_=`().
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c3.
+Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c4().
+Qplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`c4_=`().
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#e1.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#e2.
+Oplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bd.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi2.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bd3.
+Rplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#formatter.
+Uplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#squirrelDay1.
+Uplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#squirrelDay2.
+Uplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#squirrelDay3.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#zdt.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#now.
+Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#xmas.
+Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#now1.
+Qplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#nextXmas.
+Nplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#years.
+Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#date.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#fmt.
+Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#df.
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#da.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo.
+Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo.í: *≥
+Uplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.args$opt0(). Ä*	args$opt0ÄäA"?
+=;scala/Option#*(scala/Array#scala/Predef.String#í *ò
+Zplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.args$set().(args)*argsÄä.",
+*(scala/Array#scala/Predef.String#*ﬁ
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.args$set().*args$setÄäqo\
+Zplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.args$set().(args)scala/Unit#í: *≤
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.args$opt().*args$optÄäE"C
+Aj?
+=;scala/Option#*(scala/Array#scala/Predef.String#í: *ò
+Qplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.args$().*argsÄä2"0
+.j,
+*(scala/Array#scala/Predef.String#í: *∫
+Pplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.script. ¿*scriptÄäP"N
+LJHplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#í: *î
+Vplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.main().(args)*argsÄä.",
+*(scala/Array#scala/Predef.String#*“
+Pplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.main().*mainÄämkX
+Vplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.main().(args)scala/Unit#í: *¿
+Iplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.
+ *&03_numbers_and_dates$u002Eworksheet_scÄäΩ
+∫java/lang/Object#N¢KIplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`."–
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.`<init>`().
+Uplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.args$opt0().
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.args$set().
+Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.args$opt().
+Qplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.args$().
+Pplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.script.
+Pplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.main().í: *Ç
+oplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$package`.`03_numbers_and_dates.worksheet`. *#03_numbers_and_dates$u002EworksheetÄä]"[
+YjW
+U¢RPplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet_sc`.script.í: *•
+Nplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$package`. *
+day$minus2Ääæ
+ªjava/lang/Object#S¢PNplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$package`."Ã
+Yplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$package`.`<init>`().
+oplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$package`.`03_numbers_and_dates.worksheet`.2
+ java/2
+ 
+java/util/2
+ java/util/Locale#2
+ scala/Char.2"
+ scala/Char.MinValue.2!
+ scala/Char#toInt().2
+ scala/Char.2"
+ scala/Char.MaxValue.2!
+ scala/Char#toInt().2
+ scala/Byte.2"
+ scala/Byte.MinValue.2
+ scala/Byte.2"
+ scala/Byte.MaxValue.2
+		 scala/Short.2#
+		 scala/Short.MinValue.2
+
+
+ scala/Short.2#
+
+
+ scala/Short.MaxValue.2
+ 
+scala/Int.2!
+ scala/Int.MinValue.2
+ 
+scala/Int.2!
+ scala/Int.MaxValue.2
+ scala/Long.2"
+ scala/Long.MinValue.2
+ scala/Long.2"
+ scala/Long.MaxValue.2
+ scala/Float.2#
+ scala/Float.MinValue.2
+ scala/Float.2#
+ scala/Float.MaxValue.2
+ scala/Double.2$
+ scala/Double.MinValue.2
+ scala/Double.2$
+ scala/Double.MaxValue.2Y
+ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x1.2Y
+ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x2.2Y
+ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x3.2Y
+ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x4.2Y
+!! Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x5.2Y
+"" Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x6.2Y
+## Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x7.2Y
+$$ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x8.2Y
+'' Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x9.2Z
+(( Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x10.2Z
+)) Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x11.2#
+,	, scala/package.BigInt#2Z
+,, Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x12.2'
+-	- scala/package.BigDecimal#2Z
+-- Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x13.2 
+// scala/Int#`+`(+4).2X
+// Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x.2X
+00 Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x.2 
+00 scala/Int#`>`(+3).2#
+00 scala/Boolean#`&&`().2X
+00 Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x.2 
+00 scala/Int#`<`(+3).2'
+0#0 *scala/Predef.println(+1).2X
+0+0 ,Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x.2V
+22 Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#x.2'
+33 scala/Predef.println(+1).2'
+44 scala/Predef.println(+1).2)
+7	7 scala/runtime/RichInt#to().2
+77 local02
+88 local02 
+88 scala/Int#`>`(+3).2'
+99 
+scala/Predef.println(+1).2
+99 local022
+BB 
+$scala/collection/StringOps#toByte().23
+CC %scala/collection/StringOps#toShort().21
+DD 	#scala/collection/StringOps#toInt().22
+EE 
+$scala/collection/StringOps#toLong().23
+FF %scala/collection/StringOps#toFloat().24
+GG &scala/collection/StringOps#toDouble().28
+KK *scala/collection/StringOps#toByteOption().29
+LL +scala/collection/StringOps#toShortOption().27
+MM )scala/collection/StringOps#toIntOption().28
+NN *scala/collection/StringOps#toLongOption().29
+OO +scala/collection/StringOps#toFloatOption().2:
+PP ,scala/collection/StringOps#toDoubleOption().27
+QQ )scala/collection/StringOps#toIntOption().2#
+S	S scala/package.BigInt.2Y
+SS Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b1.2'
+T	T scala/package.BigDecimal.2Y
+TT Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b2.2
+YY java/lang/Integer#2+
+YY java/lang/Integer#parseInt().2
+ZZ java/lang/Integer#2+
+ZZ java/lang/Integer#parseInt().2
+[[ java/lang/Integer#2+
+[[ java/lang/Integer#parseInt().2
+\\ java/lang/Integer#2+
+\\ java/lang/Integer#parseInt().2
+]] java/lang/Integer#2+
+]] java/lang/Integer#parseInt().2"
+`` scala/Predef.String#2e
+`` Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV1().(s)2e
+`` Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV1().(s)21
+`` "#scala/collection/StringOps#toInt().2b
+`` Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV1().2"
+bb scala/Predef.String#2e
+bb Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV2().(s)2
+bb  scala/Option#2
+b!b $
+scala/Int#2
+cc 
+scala/Some.2e
+cc Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV2().(s)21
+cc #scala/collection/StringOps#toInt().22
+dd %$scala/package.NumberFormatException#2
+dd local12
+d)d -scala/None.2b
+bb Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV2().2
+hh scala/2
+hh scala/util/2
+hh scala/util/Try.2
+hh scala/util/Try#2"
+ii scala/Predef.String#2e
+ii Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV3().(s)2
+ii  scala/Option#2
+i!i $
+scala/Int#2
+i(i +scala/util/Try.2e
+i,i -Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV3().(s)21
+i.i 3#scala/collection/StringOps#toInt().2(
+i5i =scala/util/Try#toOption().2b
+ii Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV3().2`
+kk 	Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV3().2`
+ll 	Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV3().2`
+mm 	Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV3().2`
+nn 	Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV3().2
+pp scala/2
+pp scala/util/2
+pp scala/util/Try.2
+pp scala/util/Try#2!
+pp scala/util/Success.2!
+pp scala/util/Success#2!
+p!p (scala/util/Failure.2!
+p!p (scala/util/Failure#2"
+qq scala/Predef.String#2e
+qq Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV4().(s)2
+qq scala/util/Try#2
+qq !
+scala/Int#2
+q%q (scala/util/Try.2e
+q)q *Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV4().(s)21
+q+q 0#scala/collection/StringOps#toInt().2b
+qq Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV4().2`
+ss 	Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV4().2`
+tt 	Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV4().2%
+xx scala/Predef.classOf().22
+xx %$scala/package.NumberFormatException#2"
+x9x ?scala/Predef.String#2e
+x6x 7Wplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV5().(s)2e
+xCx DWplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV5().(s)21
+xEx J#scala/collection/StringOps#toInt().2b
+x,x 5Tplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#makeIntV5().2
+~~ scala/Byte#2X
+~~ Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b.2V
+ Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b.2#
+ 	scala/Byte#toShort().2X
+ÄÄ Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b.2#
+
+ÄÄ scala/Byte#toInt().2X
+ÅÅ Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b.2$
+
+ÅÅ scala/Byte#toLong().2X
+ÇÇ Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b.2%
+
+ÇÇ 	scala/Byte#toFloat().2X
+ÉÉ Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b.2&
+
+ÉÉ 
+scala/Byte#toDouble().2[
+
+ÖÖ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d1.2Y
+ÜÜ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d1.2'
+
+ÜÜ 
+scala/Double#toFloat().2Y
+áá Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d1.2&
+
+áá 	scala/Double#toLong().2Y
+àà Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d1.2%
+
+àà scala/Double#toInt().2Y
+ââ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d1.2'
+
+ââ 
+scala/Double#toShort().2Y
+ää Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d1.2&
+
+ää 	scala/Double#toByte().2
+
+åå scala/Double#2[
+
+åå Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d2.2Y
+çç Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d2.27
+
+çç 'scala/runtime/RichDouble#isValidByte().2Y
+éé Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d2.27
+
+éé 'scala/runtime/RichDouble#isValidChar().2Y
+èè Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d2.28
+
+èè (scala/runtime/RichDouble#isValidShort().2Y
+êê Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d2.26
+
+êê &scala/runtime/RichDouble#isValidInt().2[
+
+ïï Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d3.2Y
+ññ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d3.26
+
+ññ &scala/runtime/RichDouble#isValidInt().2Y
+óó Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d3.28
+
+óó (scala/runtime/RichDouble#isValidShort().2Y
+òò Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d3.27
+
+òò 'scala/runtime/RichDouble#isValidByte().2
+
+öö scala/Byte#2[
+
+öö Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b3.2Y
+õõ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b3.2)
+
+õõ scala/Any#asInstanceOf().2
+
+õõ scala/Short#2Y
+úú Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b3.2)
+
+úú scala/Any#asInstanceOf().2
+
+úú 
+scala/Int#2Y
+ùù Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b3.2)
+
+ùù scala/Any#asInstanceOf().2
+
+ùù scala/Long#2Y
+ûû Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b3.2)
+
+ûû scala/Any#asInstanceOf().2
+
+ûû scala/Float#2Y
+üü Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b3.2)
+
+üü scala/Any#asInstanceOf().2
+
+üü scala/Double#2
+
+°° 
+
+scala/Int#2Z
+
+°° Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#i.2
+
+¢¢ scala/Long#2Z
+
+¢¢ Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#l.2Z
+
+££ Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#s.2%
+
+§
+§ scala/package.BigInt.2Z
+
+§§ Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#i.2\
+
+§§ Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b11.2%
+
+•
+• scala/package.BigInt.2Z
+
+•• Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#l.2\
+
+•• Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b22.2%
+
+¶
+¶ scala/package.BigInt.2Z
+
+¶¶ Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#s.2\
+
+¶¶ Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#b33.2'
+®® 
+scala/package.BigDecimal.2'
+©© 
+scala/package.BigDecimal.2'
+™™ 
+scala/package.BigDecimal.2'
+´´ 
+scala/package.BigDecimal.2'
+¨¨ 
+scala/package.BigDecimal.2'
+≠≠ 
+scala/package.BigDecimal.2%
+
+≠≠ scala/package.BigInt.2'
+ØØ 
+scala/package.BigDecimal.26
+
+ØØ &scala/math/BigDecimal#toBigIntExact().2'
+∞∞ 
+scala/package.BigDecimal.26
+
+∞∞ &scala/math/BigDecimal#toBigIntExact().2'
+±± 
+scala/package.BigDecimal.23
+
+±± #scala/math/BigDecimal#toIntExact().2[
+
+ªª Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a1.2
+
+ºº scala/Byte#2[
+
+ºº Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a2.2
+
+ΩΩ scala/Short#2[
+
+ΩΩ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a3.2
+
+ææ 
+scala/Int#2[
+
+ææ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a4.2
+
+øø scala/Long#2[
+
+øø Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a5.2
+
+¿¿ scala/Float#2[
+
+¿¿ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a6.2
+
+¡¡ scala/Double#2[
+
+¡¡ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a7.2
+
+√√ scala/Byte#2[
+
+√√ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a8.2
+
+ƒƒ 
+scala/Int#2[
+
+ƒƒ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a9.2
+
+≈≈ scala/Short#2\
+
+≈≈ Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a10.2
+
+∆∆ scala/Double#2\
+
+∆∆ Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a11.2
+
+«« scala/Float#2\
+
+«« Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a12.2\
+
+…… Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a13.2\
+
+   Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a14.2\
+
+ÀÀ Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a16.2\
+
+ÃÃ Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a17.2\
+
+ÕÕ Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a18.2\
+
+œœ Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a19.2\
+
+–– Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#a20.2
+
+ÿ	ÿ scala/Short#2`
+
+ÿÿ Pplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#a().2
+
+Ÿ	Ÿ scala/Short#2`
+
+ŸŸ Pplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#b().2$
+
+⁄	⁄ scala/Predef.String#2`
+
+⁄⁄ Pplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#s().2\
+
+◊◊ 	Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#2\
+
+‹‹ Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#2Z
+
+‹‹ Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#f.2X
+›› Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#f.2`
+
+›› Pplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#a().2X
+ﬁﬁ Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#f.2`
+
+ﬁﬁ Pplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#b().2X
+ﬂﬂ Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#f.2`
+
+ﬂﬂ Pplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#Foo#s().2[
+
+·· Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#ss.2[
+
+‚‚ 
+Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#ss.2!
+
+‚‚ java/lang/Object#2Z
+
+‚‚ Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#o.2]
+
+ËË Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c1().2_
+ÈÈ Qplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`c1_=`().2[
+ÈÈ Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c1().2[
+ÍÍ Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c1().2]
+
+ÏÏ Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c2().2_
+ÌÌ Qplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`c2_=`().2[
+ÌÌ Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c2().2[
+ÓÓ Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c2().2_
+ÔÔ Qplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`c2_=`().2[
+ÔÔ Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c2().2[
+ Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c2().2[
+
+ÚÚ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c3.2]
+
+ıı Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c4().2_
+ˆˆ Qplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`c4_=`().2[
+ˆˆ Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c4().2_
+˜˜ Qplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`c4_=`().2[
+˜˜ Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c4().2[
+¯¯ Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#c4().2%
+
+˛˛ scala/Double#`+`(+7).2%
+
+ˇˇ scala/Double#`+`(+7).2[
+
+ÅÅ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#e1.2%
+
+ÇÇ scala/Double#`+`(+7).2[
+
+ÇÇ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#e2.2Y
+ÉÉ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#e1.2&
+
+ÉÉ scala/Double#`==`(+6).2[
+
+ÉÉ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#e2.2
+
+ùù scala/Double#2b
+
+ùù Rplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().(x)2
+
+ûû scala/Double#2b
+
+û	û 
+Rplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().(y)2
+
+ûû %scala/Double#2j
+
+ûû Zplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().(tolerance)2
+
+û(û /scala/Boolean#2b
+
+üü 	Rplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().(x)2%
+
+ü
+ü scala/Double#`-`(+6).2b
+
+üü Rplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().(y)2/
+
+üü scala/runtime/RichDouble#abs().2%
+
+üü scala/Double#`<`(+6).2j
+
+üü Zplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().(tolerance)2_
+
+ûû Oplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().2_
+
+°° Oplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().2_
+
+¢¢ Oplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().2_
+
+££ Oplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().2_
+
+§§ Oplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#`~=`().2%
+
+™	™ scala/package.BigInt.2[
+
+™™ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.2)
+
+´	´ scala/package.BigDecimal.2[
+
+´´ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bd.2%
+
+≠
+≠ scala/package.BigInt.2\
+
+≠≠ Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi2.2)
+
+Æ
+Æ scala/package.BigDecimal.2\
+
+ÆÆ Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bd3.2Y
+∞∞ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.2(
+
+∞∞ scala/math/BigInt#`+`().2[
+
+∞∞ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.2Y
+±± Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.2(
+
+±± scala/math/BigInt#`*`().2[
+
+±± Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.2Y
+≤≤ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.2(
+
+≤≤ scala/math/BigInt#`/`().2%
+
+≤≤ scala/package.BigInt.2Y
+¥¥ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.2?
+
+¥¥ 	/scala/math/ScalaNumericAnyConversions#toByte().2Y
+µµ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.2?
+
+µµ 	/scala/math/ScalaNumericAnyConversions#toChar().2Y
+∂∂ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.2@
+
+∂∂ 
+0scala/math/ScalaNumericAnyConversions#toShort().2Y
+∑∑ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.2>
+
+∑∑ .scala/math/ScalaNumericAnyConversions#toInt().2Y
+∏∏ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.2?
+
+∏∏ 	/scala/math/ScalaNumericAnyConversions#toLong().2Y
+ππ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.2@
+
+ππ 
+0scala/math/ScalaNumericAnyConversions#toFloat().2Y
+∫∫ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.2A
+
+∫∫ 1scala/math/ScalaNumericAnyConversions#toDouble().2Y
+ºº Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.20
+
+ºº  scala/math/BigInt#isValidByte().2Y
+ΩΩ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.20
+
+ΩΩ  scala/math/BigInt#isValidChar().2Y
+ææ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.21
+
+ææ !scala/math/BigInt#isValidShort().2Y
+øø Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.2/
+
+øø scala/math/BigInt#isValidInt().2Y
+¿¿ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#bi.20
+
+¿¿  scala/math/BigInt#isValidLong().2
+¬¬ scala/Long.2$
+
+¬¬ scala/Long.MinValue.2
+√√ scala/Long.2$
+
+√√ scala/Long.MaxValue.2
+ƒƒ scala/Double.2&
+
+ƒƒ scala/Double.MinValue.2
+≈≈ scala/Double.2&
+
+≈≈ scala/Double.MaxValue.2%
+
+»» scala/Double#`+`(+7).2'
+…… 
+scala/package.BigDecimal.2,
+
+…… scala/math/BigDecimal#`+`().2)
+
+…… scala/package.BigDecimal.2'
+ÀÀ 
+scala/package.BigDecimal.2%
+
+ÀÀ scala/Double#`+`(+7).2'
+ÃÃ 
+scala/package.BigDecimal.2%
+
+ÃÃ scala/Double#`*`(+6).2'
+ŒŒ 
+scala/package.BigDecimal.2,
+
+ŒŒ scala/math/BigDecimal#`+`().2)
+
+ŒŒ scala/package.BigDecimal.2'
+œœ 
+scala/package.BigDecimal.2,
+
+œœ scala/math/BigDecimal#`*`().2)
+
+œœ scala/package.BigDecimal.2
+
+’’ java/2
+
+’’ 
+java/text/2'
+
+’’ java/text/NumberFormat#2'
+
+ﬂﬂ java/text/NumberFormat#2=
+
+ﬂﬂ 0-java/text/NumberFormat#getCurrencyInstance().2b
+
+ﬂﬂ Rplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#formatter.2`
+‡‡ 	Rplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#formatter.22
+
+‡
+‡ "java/text/NumberFormat#format(+1).2`
+·· 	Rplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#formatter.22
+
+·
+· "java/text/NumberFormat#format(+1).2`
+‚‚ 	Rplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#formatter.22
+
+‚
+‚ "java/text/NumberFormat#format(+1).2
+
+ËË java/2
+
+ËË 
+java/time/2"
+ÍÍ 	java/time/LocalDate#2*
+
+Í
+Í java/time/LocalDate#now().2"
+ÎÎ 	java/time/LocalTime#2*
+
+Î
+Î java/time/LocalTime#now().2&
+ÏÏ java/time/LocalDateTime#2.
+
+ÏÏ java/time/LocalDateTime#now().2 
+ÌÌ java/time/Instant#2(
+
+ÌÌ java/time/Instant#now().2&
+ÓÓ java/time/ZonedDateTime#2.
+
+ÓÓ java/time/ZonedDateTime#now().2$
+
+ java/time/LocalDate#2+
+
+ java/time/LocalDate#of(+1).2e
+
+ Uplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#squirrelDay1.2$
+
+ÒÒ java/time/LocalDate#2)
+
+ÒÒ java/time/LocalDate#of().2 
+
+Ò&Ò +java/time/Month#2(
+
+Ò,Ò 3java/time/Month#JANUARY.2e
+
+ÒÒ Uplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#squirrelDay2.2$
+
+ÚÚ java/time/LocalDate#2+
+
+ÚÚ java/time/LocalDate#of(+1).2/
+
+Ú,Ú 4java/time/LocalDate#plusDays().2e
+
+ÚÚ Uplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#squirrelDay3.2"
+ˆˆ 	java/time/LocalTime#2)
+
+ˆ
+ˆ java/time/LocalTime#of().2"
+˜˜ 	java/time/LocalTime#2)
+
+˜
+˜ java/time/LocalTime#of().2"
+¯¯ 	java/time/LocalTime#2)
+
+¯
+¯ java/time/LocalTime#of().2"
+˘˘ 	java/time/LocalTime#2)
+
+˘
+˘ java/time/LocalTime#of().2(
+
+ˇˇ java/time/ZonedDateTime#2-
+
+ˇˇ java/time/ZonedDateTime#of().2$
+
+ˇˇ java/time/LocalDate#2*
+
+ˇˇ  java/time/LocalDate#now().2$
+
+ˇ"ˇ +java/time/LocalTime#2*
+
+ˇ,ˇ /java/time/LocalTime#now().2!
+
+ˇ1ˇ 7java/time/ZoneId#2(
+
+ˇ8ˇ :java/time/ZoneId#of(+1).2\
+
+˛˛ Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#zdt.2
+ÅÅ java/time/ZoneId#2(
+
+ÅÅ 	java/time/ZoneId#of(+1).2
+ÇÇ java/time/ZoneId#2(
+
+ÇÇ 	java/time/ZoneId#of(+1).2
+ÉÉ java/time/ZoneId#2(
+
+ÉÉ 	java/time/ZoneId#of(+1).2
+ÑÑ java/time/ZoneId#2(
+
+ÑÑ 	java/time/ZoneId#of(+1).2
+
+ää java/2
+
+ää 
+java/time/2$
+
+ää java/time/LocalDate#2
+
+ãã java/2
+
+ãã 
+java/time/2#
+
+ãã java/time/temporal/2.
+
+ãã $java/time/temporal/ChronoUnit#23
+
+ã%ã )#java/time/temporal/ChronoUnit#DAYS.2$
+
+å
+å java/time/LocalDate#2+
+
+åå java/time/LocalDate#of(+1).2\
+
+åå Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#now.2$
+
+çç java/time/LocalDate#2+
+
+çç java/time/LocalDate#of(+1).2]
+
+çç Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#xmas.21
+èè #java/time/temporal/ChronoUnit#DAYS.28
+
+èè (java/time/temporal/ChronoUnit#between().2\
+
+èè Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#now.2]
+
+èè Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#xmas.2
+
+ëë java/2
+
+ëë 
+java/time/2$
+
+ëë java/time/LocalDate#2
+
+íí java/2
+
+íí 
+java/time/2#
+
+íí java/time/temporal/2.
+
+íí $java/time/temporal/ChronoUnit#2$
+
+ìì java/time/LocalDate#2+
+
+ìì java/time/LocalDate#of(+1).2]
+
+ìì Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#now1.2$
+
+îî java/time/LocalDate#2+
+
+îî java/time/LocalDate#of(+1).2a
+
+îî Qplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#nextXmas.2
+
+ïï scala/Long#24
+
+ïï $java/time/temporal/ChronoUnit#YEARS.28
+
+ïï (java/time/temporal/ChronoUnit#between().2]
+
+ññ Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#now1.2a
+
+óó 
+Qplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#nextXmas.2^
+
+ïï 	Nplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#years.2
+
+ûû java/2
+
+ûû 
+java/time/2$
+
+ûû java/time/LocalDate#2
+
+üü java/2
+
+üü 
+java/time/2!
+
+üü java/time/format/23
+
+üü )#java/time/format/DateTimeFormatter#2$
+
+†† java/time/LocalDate#2*
+
+†† java/time/LocalDate#now().2]
+
+†† Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#date.23
+
+°
+° #java/time/format/DateTimeFormatter#2B
+
+°° *2java/time/format/DateTimeFormatter#BASIC_ISO_DATE.2\
+
+°° Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#fmt.2Z
+¢¢ Lplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#fmt.2<
+
+¢¢ 
+,java/time/format/DateTimeFormatter#format().2]
+
+¢¢ Mplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#date.2
+
+®® java/2
+
+®® 
+java/time/2$
+
+®® java/time/LocalDate#2$
+
+©© java/time/LocalDate#2,
+
+©© java/time/LocalDate#parse().2Z
+
+©© Jplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#d.2
+
+´´ java/2
+
+´´ 
+java/time/2!
+
+´´ java/time/format/23
+
+´´ )#java/time/format/DateTimeFormatter#23
+
+¨	¨ #java/time/format/DateTimeFormatter#2?
+
+¨¨ $/java/time/format/DateTimeFormatter#ofPattern().2[
+
+¨¨ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#df.2$
+
+≠	≠ java/time/LocalDate#2.
+
+≠≠ java/time/LocalDate#parse(+1).2[
+
+≠'≠ )Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#df.2[
+
+≠≠ Kplay$minuswith$minusscala/day$minus2/`03_numbers_and_dates.worksheet$_`#da.PZ 1e41c5f5bde9b3c413fbe0b5b6909049bA
+,, 5
+3
+#!
+scala/math/BigInt.int2bigInt().2
+
+,, bL
+-- @
+>
+.,
+*scala/math/BigDecimal.double2bigDecimal().2
+
+-- bJ
+77 >
+<
+,*
+(scala/LowPriorityImplicits#intWrapper().2
+
+77 b;
+BB 1
+/
+!
+scala/Predef.augmentString().
+2
+BB b;
+CC 1
+/
+!
+scala/Predef.augmentString().
+2
+CC b;
+DD 1
+/
+!
+scala/Predef.augmentString().
+2
+DD b;
+EE 1
+/
+!
+scala/Predef.augmentString().
+2
+EE b;
+FF 1
+/
+!
+scala/Predef.augmentString().
+2
+FF b;
+GG 1
+/
+!
+scala/Predef.augmentString().
+2
+GG b;
+KK 1
+/
+!
+scala/Predef.augmentString().
+2
+KK b;
+LL 1
+/
+!
+scala/Predef.augmentString().
+2
+LL b;
+MM 1
+/
+!
+scala/Predef.augmentString().
+2
+MM b;
+NN 1
+/
+!
+scala/Predef.augmentString().
+2
+NN b;
+OO 1
+/
+!
+scala/Predef.augmentString().
+2
+OO b;
+PP 1
+/
+!
+scala/Predef.augmentString().
+2
+PP b;
+QQ 1
+/
+!
+scala/Predef.augmentString().
+2
+QQ b?
+`` 3
+1
+!
+scala/Predef.augmentString().2
+
+`` bG
+cc 
+;B9
+':%
+2
+
+cc 
+
+scala/Some.apply().
+scala/Int#b?
+cc 3
+1
+!
+scala/Predef.augmentString().2
+
+cc bK
+i(i +?B=
++:)
+2
+
+i(i +
+scala/util/Try.apply().
+scala/Int#b?
+i,i -3
+1
+!
+scala/Predef.augmentString().2
+
+i,i -bK
+q%q (?B=
++:)
+2
+
+q%q (
+scala/util/Try.apply().
+scala/Int#b?
+q)q *3
+1
+!
+scala/Predef.augmentString().2
+
+q)q *b>
+xx 4B2
+
+2
+xx $" java/lang/NumberFormatException#b?
+xCx D3
+1
+!
+scala/Predef.augmentString().2
+
+xCx DbM
+çç A
+?
+/-
++scala/LowPriorityImplicits#doubleWrapper().2
+
+çç bM
+éé A
+?
+/-
++scala/LowPriorityImplicits#doubleWrapper().2
+
+éé bM
+èè A
+?
+/-
++scala/LowPriorityImplicits#doubleWrapper().2
+
+èè bM
+êê A
+?
+/-
++scala/LowPriorityImplicits#doubleWrapper().2
+
+êê bM
+ññ A
+?
+/-
++scala/LowPriorityImplicits#doubleWrapper().2
+
+ññ bM
+óó A
+?
+/-
++scala/LowPriorityImplicits#doubleWrapper().2
+
+óó bM
+òò A
+?
+/-
++scala/LowPriorityImplicits#doubleWrapper().2
+
+òò bQ
+
+üü C
+A
+/-
++scala/LowPriorityImplicits#doubleWrapper().2
+
+üü 
