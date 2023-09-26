@@ -1,3 +1,11 @@
+import scala.util.Success
+import scala.util.Failure
+import scala.util.Try
+import scala.io.Source
+import java.io.IOException
+import java.io.FileNotFoundException
+
+
 // for Loops and for Expressions
 
 for i <- List(1, 2, 3) do println(i)
@@ -458,3 +466,86 @@ stock match
     case s if s.symbol == "AAPL" && s.price < 140 => println("buy")
     case s if s.symbol == "AAPL" && s.price > 160 => "sell"
     case _ => // do nothing
+
+
+
+// Matching One or More Exceptions with try/catch
+
+// try
+//     doSomething()
+// catch
+//     case e: SomeException => e.printStackTrace
+// finally
+//     // do your cleanup work
+
+def openAndReadAFile(filename: String)= 
+    "DATA"
+
+try
+    openAndReadAFile("filename.txt")
+catch
+    case e: FileNotFoundException => println(s"Couldn’t find .")
+    case e: IOException =>println(s"Had an IOException trying to read")
+    case _: Throwable => println("Nothing to worry about, just an exception")
+
+
+
+def readFile(filename: String): Option[String] =
+    try
+        Some(Source.fromFile(filename).getLines.mkString)
+    catch
+        case _: (FileNotFoundException|IOException) => None
+
+
+def readFileV2(filename: String): String =
+    try
+        Source.fromFile(filename).getLines.mkString
+    catch
+        case t: Throwable => throw t
+
+
+def readFileV3(filename: String): Try[String] =
+    try
+        Success(Source.fromFile(filename).getLines.mkString)
+    catch
+        case t: Throwable => Failure(t)
+
+
+// A concise way to catch everything
+
+import scala.util.control.Exception.allCatch
+
+// OPTION
+allCatch.opt("42".toInt)
+allCatch.opt("foo".toInt) 
+
+
+// TRY
+allCatch.toTry("42".toInt)
+allCatch.toTry("foo".toInt)
+
+
+// EITHER
+allCatch.either("42".toInt)
+allCatch.either("foo".toInt)
+
+
+
+
+//  Declaring a Variable Before Using It in a try/catch/finally Block
+
+var sourceOption: Option[Source] = None
+try
+    sourceOption = Some(Source.fromFile("/etc/passwd1"))
+    sourceOption.foreach { source =>
+        // do whatever you need to do with 'source' here ...
+        for line <- source.getLines do println(line.toUpperCase)
+    }
+catch
+    case ioe: IOException => ioe.printStackTrace
+    case fnf: FileNotFoundException => fnf.printStackTrace
+finally
+    sourceOption match
+    case None => println("bufferedSource == None")
+    case Some(s) =>println("closing the bufferedSource ...")
+        s.close
