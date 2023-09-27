@@ -1,0 +1,33 @@
+dotty.tools.dotc.core.TypeError$$anon$1: Toplevel definition s1 is defined in
+  <WORKSPACE>/05_classes.worksheet.sc
+and also in
+  <WORKSPACE>/05_classes_1.worksheet.sc
+One of these files should be removed from the classpath.
+occurred in the presentation compiler.
+
+action parameters:
+offset: 148
+uri: file://<WORKSPACE>/05_classes_2.worksheet.sc
+text:
+object worksheet{
+  
+  
+  class FileReader(filename: String):
+  // assign this block of code to the 'text' field
+  val text =
+  // 'fileContents' wi@@ll either contain the file contents,
+  // or the exception message as a string
+  val fileContents =
+  try
+  Source.fromFile(filename).getLines.mkString
+  catch
+  case e: Exception => e.getMessage
+  println(fileContents)
+   // print the contents
+  fileContents
+   /
+}
+
+
+error stacktrace:
+
