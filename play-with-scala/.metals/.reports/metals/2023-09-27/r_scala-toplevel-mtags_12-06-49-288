@@ -1,0 +1,48 @@
+id: file://<WORKSPACE>/03/8.worksheet.sc:[1022..1027) in Input.VirtualFile("file://<WORKSPACE>/03/8.worksheet.sc", "//  Marking Traits So They Can Only Be Used by Subclasses of a Certain Type
+
+// trait HasLegs
+
+// trait CanRun:
+//     this: HasLegs=>
+
+// class Dog extends HasLegs, CanRun:
+//     def whatAmI(): Unit =
+//         if this.isInstanceOf[Dog] then println("Dog")
+//         if this.isInstanceOf[HasLegs] then println("HasLegs")
+//         if this.isInstanceOf[CanRun] then println("CanRun")
+
+// val d = Dog()
+// d.whatAmI()
+
+// A trait can call methods on the required type
+
+// trait HasLegs:
+//     def numLegs = 0
+
+// trait CanRun:
+//     this: HasLegs =>
+//     def run() = println(s"I have $numLegs legs and I’m running!")
+
+// class Dog extends HasLegs, CanRun:
+//     override val numLegs = 4
+
+// val d = Dog()
+// d.run()
+
+//  Limiting Which Classes Can Use a Trait by Inheritance
+
+trait Employee
+class CorporateEmployee extends Employee
+class StoreEmployee extends Employee
+
+trait DeliversFood extends StoreEmployee
+
+// this is allowed
+class DeliveryPerson extends StoreEmployee, DeliversFood
+
+class // this is allowed
+class Receptionist extends CorporateEmployee, DeliversFood
+")
+file://<WORKSPACE>/03/8.worksheet.sc:44: error: expected identifier; obtained class
+class Receptionist extends CorporateEmployee, DeliversFood
+^

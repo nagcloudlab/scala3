@@ -1,26 +1,19 @@
 // Creating a Primary Constructor
-
 class Foo
 
 class Employee(var firstName: String, var lastName: String):
-
   // a statement
   println("the constructor begins ...")
-
   // some class fields (variable assignments)
   var age = 0
   private var salary = 0d
-
   // a method call
   printEmployeeInfo()
-
   override def toString = s"$firstName $lastName is $age years old"
   def printEmployeeInfo() = println(this) // uses toString
-
   // any statement or field prior to the end of the class
   // definition is part of the class constructor
   println("the constructor ends")
-
 // optional 'end' statement
 end Employee
 
@@ -30,18 +23,17 @@ e.lastName = "N"
 e.age = 40
 e.firstName
 
+
 //  Controlling the Visibility of Constructor Fields
 
 class Person1(var name: String)
 val p = Person1("Mark Sinclair Vincent")
-
 p.name
 p.name = "John"
 p.name
 
 class Person2(val name: String)
 val p2 = Person2("Mark Sinclair Vincent")
-
 p2.name
 //p2.name="John"
 
@@ -53,8 +45,8 @@ val se = SuperEncryptor("1234")
 // se.password
 se.getEncryptedPassword
 
-// Adding private to val or var
 
+// Adding private to val or var
 enum Role:
   case HumanResources, WorkerBee
 import Role.*
@@ -71,10 +63,8 @@ e3.name
 e3.getSalary(WorkerBee)
 e3.getSalary(HumanResources)
 
-// e3.salary
 
 //  Defining Auxiliary Constructors for Classes
-
 enum CrustSize:
   case Small, Medium, Large
 

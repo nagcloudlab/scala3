@@ -9,6 +9,7 @@
 //     def unapply(s:Student) : Option[(Int,String)]= 
 //         Some((s.id, s.name))
 
+
 case class Student(id: Int, name: String)
 
 val s1 = Student(1, "s1")
@@ -18,20 +19,7 @@ s1
 s1 == s2
 s1.hashCode()
 s2.hashCode()
+s1.copy()
 
 s1 match
     case Student(id,name) => println(s"$id, $name")
-
-
-case object O1:
-    val v=12
-
-
- object O2:    
-    val v=12
-
-
-
-O1 match
-    case O1 => println("O1")
-    

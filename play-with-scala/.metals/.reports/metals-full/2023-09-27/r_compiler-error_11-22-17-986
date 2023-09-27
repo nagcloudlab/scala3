@@ -1,0 +1,29 @@
+dotty.tools.dotc.core.TypeError$$anon$1: Toplevel definition p2 is defined in
+  <WORKSPACE>/02/05_classes_5.worksheet.worksheet.sc
+and also in
+  <WORKSPACE>/02/05_classes_5.worksheet.sc
+One of these files should be removed from the classpath.
+occurred in the presentation compiler.
+
+action parameters:
+offset: 242
+uri: file://<WORKSPACE>/03/Demo1.scala
+text:
+
+
+trait First:
+    println("First is constructed")
+trait Second:
+    println("Second is constructed")
+trait Third:
+    println("Third is constructed")
+
+class MyClass extends First, Second, Third:
+    println("MyClass is constructed")    
+
+
+@m@@
+
+
+error stacktrace:
+
