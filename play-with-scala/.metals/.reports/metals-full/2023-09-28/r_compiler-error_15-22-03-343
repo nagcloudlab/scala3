@@ -1,0 +1,38 @@
+dotty.tools.dotc.core.TypeError$$anon$1: Toplevel definition LastNameOrdering is defined in
+  <WORKSPACE>/08-collections/3.worksheet.sc
+and also in
+  <WORKSPACE>/08-collections/3.worksheet.sc
+One of these files should be removed from the classpath.
+occurred in the presentation compiler.
+
+action parameters:
+offset: 436
+uri: file://<WORKSPACE>/08-collections/3.worksheet.sc
+text:
+object worksheet{
+  // val fruits = Array("cherry", "apple", "banana")
+  // scala.util.Sorting.quickSort(fruits)
+  // fruits.foreach(println)
+  
+  class Person(val firstName: String, val lastName: String):
+    override def toString = s"$firstName $lastName"
+  
+  val peeps = Array(
+    Person("Jessica", "Day"),
+    Person("Nick", "Miller"),
+    Person("Winston", "Bishop"),
+    Person("", "Schmidt"),
+    Person("Coach", "")
+  )
+  
+  g@@ object LastNameOrdering extends Ordering[Person]:
+    def compare(a: Person, b: Person): Int = a.lastName compare b.lastName
+  
+  scala.util.Sorting.quickSort(peeps)
+  peeps.foreach(println)
+  
+}
+
+
+error stacktrace:
+
