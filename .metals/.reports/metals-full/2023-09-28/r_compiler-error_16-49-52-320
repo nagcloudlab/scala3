@@ -1,0 +1,50 @@
+java.util.NoSuchElementException: next on empty iterator
+occurred in the presentation compiler.
+
+action parameters:
+uri: file://<WORKSPACE>/play-with-scala3/src/main/scala/App2.java
+text:
+import java.util.ArrayList;
+import java.util.List;
+
+class Util{
+    public static boolean isVeg(String item){
+        return List.of("idly","vada","poori").contains(item)
+    }
+}
+
+public class App2 {
+    public static void main(String[] args) {
+
+        List<String> menu=new ArrayList<>();
+        menu.add("idly");
+        menu.add("vada");
+        menu.add("biryani");
+        menu.add("poori");
+
+        menu.removeIf(item->!Util.isVeg(item));
+        menu.removeIf(Util::isVeg); // Method reference
+
+
+        System.out.println(menu);
+
+    }
+}
+
+
+
+error stacktrace:
+scala.collection.Iterator$$anon$19.next(Iterator.scala:973)
+	scala.collection.Iterator$$anon$19.next(Iterator.scala:971)
+	scala.collection.mutable.MutationTracker$CheckedIterator.next(MutationTracker.scala:76)
+	scala.collection.IterableOps.head(Iterable.scala:222)
+	scala.collection.IterableOps.head$(Iterable.scala:222)
+	scala.collection.AbstractIterable.head(Iterable.scala:933)
+	dotty.tools.dotc.interactive.InteractiveDriver.run(InteractiveDriver.scala:168)
+	scala.meta.internal.pc.MetalsDriver.run(MetalsDriver.scala:45)
+	scala.meta.internal.pc.PcCollector.<init>(PcCollector.scala:42)
+	scala.meta.internal.pc.PcSemanticTokensProvider$Collector$.<init>(PcSemanticTokensProvider.scala:60)
+	scala.meta.internal.pc.PcSemanticTokensProvider.Collector$lzyINIT1(PcSemanticTokensProvider.scala:60)
+	scala.meta.internal.pc.PcSemanticTokensProvider.Collector(PcSemanticTokensProvider.scala:60)
+	scala.meta.internal.pc.PcSemanticTokensProvider.provide(PcSemanticTokensProvider.scala:81)
+	scala.meta.internal.pc.ScalaPresentationCompiler.semanticTokens$$anonfun$1(ScalaPresentationCompiler.scala:95)
