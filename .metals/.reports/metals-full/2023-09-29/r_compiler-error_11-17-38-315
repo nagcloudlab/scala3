@@ -1,0 +1,19 @@
+dotty.tools.dotc.core.TypeError$$anon$1: Toplevel definition listPeople is defined in
+  <WORKSPACE>/work-with-scala/src/main/scala/App3.scala
+and also in
+  <WORKSPACE>/play-with-scala/09-implicits/3.scala
+One of these files should be removed from the classpath.
+occurred in the presentation compiler.
+
+action parameters:
+offset: 16
+uri: file://<WORKSPACE>/play-with-scala/10-concurrency/App.scala
+text:
+object App {
+  m@@
+}
+
+
+
+error stacktrace:
+
